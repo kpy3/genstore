@@ -1,0 +1,13 @@
+@ECHO OFF
+
+SETLOCAL
+
+CHCP 1251 >NUL
+
+SET SCRIPT_HOME=%~dp0
+
+"%ERLANG_HOME%"\bin\escript.exe %SCRIPT_HOME%\rebar %*
+
+TITLE Console
+
+ENDLOCAL

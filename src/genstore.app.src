@@ -1,0 +1,12 @@
+{application, genstore,
+ [
+  {description, "Simple generator chain extractor and storage"},
+  {vsn, "1.0.0"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { genstore_app, []}},
+  {env, []}
+ ]}.
