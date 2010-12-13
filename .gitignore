@@ -1,6 +1,5 @@
 deps
 ebin
-target
 erl_crash.dump
 .project
 .settings
