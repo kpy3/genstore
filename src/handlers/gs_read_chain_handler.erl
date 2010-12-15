@@ -7,6 +7,6 @@
 
 %% callback on request received
 handle_request(Req) ->
-    Req:ok(<<"Hello, GET!">>).
+    Req:respond({200, [], <<"Hello, GET!\r\n">>}).
 
     

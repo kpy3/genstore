@@ -24,12 +24,6 @@ start_link() ->
 %% ===================================================================
 
 init([]) ->
-    {ok, MisultinConfig} = misultin_config(),
-    Http = ?CHILD(misultin, MisultinConfig, worker),
-    {ok, { {one_for_one, 5, 10}, [Http]} }.
-
-misultin_config() ->
-    {ok, Config} = application:get_env(misultin),
-    {value, {handler, Module, Function}} = lists:keysearch(handler, 1, Config), 
-    Config1 = Config ++ [{loop, fun(Req) -> erlang:apply(Module, Function, [Req]) end}],
-    {ok, Config1}.
+%    {ok, Config} = application:get_env(mochiweb),
+%    Http = ?CHILD(mochiweb, MisultinConfig, worker),
+    {ok, { {one_for_one, 5, 10}, []} }.

@@ -21,5 +21,6 @@ handle('PUT', Req) ->
 handle('GET', Req) ->
     gs_read_chain_handler:handle_request(Req);
 handle(_, Req) ->
-    Req:respond(405, <<"Method not allowed\n">>).
+    Headers = [{"Allow", "GET,PUT,DELETE"}],
+    Req:respond({405, Headers, <<"405 Method Not Allowed\r\n">>}).
     

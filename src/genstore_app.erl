@@ -10,7 +10,10 @@
 %% ===================================================================
 
 start(_StartType, _StartArgs) ->
+    {ok, Config} = application:get_env(mochiweb),
+    mochiweb_http:start(Config),
     genstore_sup:start_link().
 
 stop(_State) ->
+    mochiweb_http:stop(),
     ok.
