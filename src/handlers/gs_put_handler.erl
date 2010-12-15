@@ -1,4 +1,4 @@
--module(gs_read_chain_handler).
+-module(gs_put_handler).
 -author('Sergey Yelin <elinsn@gmail.com>').
 -vsn("1.0.0").
 
@@ -7,6 +7,6 @@
 
 %% callback on request received
 handle_request(Req) ->
-    Req:respond({200, [], <<"Hello, GET!\r\n">>}).
+    Req:respond({200, [], <<"Hello, PUT!\r\n">>}).
 
     
