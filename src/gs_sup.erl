@@ -1,5 +1,6 @@
-
--module(genstore_sup).
+-module(gs_sup).
+-author('Sergey Yelin <elinsn@gmail.com>').
+-vsn("1.0.0").
 
 -behaviour(supervisor).
 
