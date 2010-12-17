@@ -12,6 +12,7 @@
 start(_StartType, _StartArgs) ->
     {ok, Config} = application:get_env(mochiweb),
     mochiweb_http:start(Config),
+    gs_store:init(),
     genstore_sup:start_link().
 
 stop(_State) ->
