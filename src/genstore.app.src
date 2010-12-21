@@ -2,7 +2,7 @@
  [
   {description, "Simple generator chain extractor and storage"},
   {vsn, "1.0.0"},
-  {registered, []},
+  {registered, [gs_sup]},
   {applications, [
                   kernel,
                   stdlib
