@@ -4,7 +4,7 @@
 
 -behaviour(gen_server).
 
--export([start_link/0]).
+-export([start_link/0, insert/1]).
 
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
          terminate/2, code_change/3]).
@@ -17,6 +17,9 @@
 start_link() ->
     gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
 
+insert(N) ->
+    gen_server:cast(erlang:whereis(?SERVER),{insert, N}).
+
 init([]) ->
     {ok, Timeout} = application:get_env(timeout),
     {ok, #state{timeout = Timeout}, ?TIMEOUT(Timeout)}.
@@ -26,6 +29,10 @@ handle_call(_Request, _From, State) ->
     Timeout = State#state.timeout,
     {reply, Reply, State, ?TIMEOUT(Timeout)}.
 
+handle_cast({insert, N}, State) ->
+    io:format(<<"===> Received N = ~p~n">>, [N]),
+    Timeout = State#state.timeout,
+    {noreply, State, ?TIMEOUT(Timeout)};
 handle_cast(_Msg, State) ->
     Timeout = State#state.timeout,
     {noreply, State, ?TIMEOUT(Timeout)}.
