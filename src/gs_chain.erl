@@ -1,4 +1,4 @@
--module(gs_chain_ext).
+-module(gs_chain).
 -author('Sergey Yelin <elinsn@gmail.com>').
 -vsn("1.0.0").
 
@@ -10,27 +10,31 @@
          terminate/2, code_change/3]).
 
 -define(SERVER, ?MODULE).
--define(TIMEOUT, 3000).
+-define(TIMEOUT(T), T * 1000).
 
--record(state, { }).
+-record(state, {timeout}).
 
 start_link() ->
     gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
 
 init([]) ->
-    {ok, #state{}, ?TIMEOUT}.
+    {ok, Timeout} = application:get_env(timeout),
+    {ok, #state{timeout = Timeout}, ?TIMEOUT(Timeout)}.
 
 handle_call(_Request, _From, State) ->
     Reply = ok,
-    {reply, Reply, State, ?TIMEOUT}.
+    Timeout = State#state.timeout,
+    {reply, Reply, State, ?TIMEOUT(Timeout)}.
 
 handle_cast(_Msg, State) ->
-    {noreply, State, ?TIMEOUT}.
+    Timeout = State#state.timeout,
+    {noreply, State, ?TIMEOUT(Timeout)}.
 
 handle_info(_Info, State) ->
     Now = iso_8601_fmt(erlang:localtime()),
     io:format(<<"===> [~s] timeout!~n">>, [Now]),
-    {noreply, State, ?TIMEOUT}.
+    Timeout = State#state.timeout,
+    {noreply, State, ?TIMEOUT(Timeout)}.
 
 iso_8601_fmt(DateTime) ->
     {{Year,Month,Day},{Hour,Min,Sec}} = DateTime,
@@ -41,4 +45,5 @@ terminate(_Reason, _State) ->
     ok.
 
 code_change(_OldVsn, State, _Extra) ->
-    {ok, State, ?TIMEOUT}.
+    Timeout = State#state.timeout,
+    {ok, State, ?TIMEOUT(Timeout)}.

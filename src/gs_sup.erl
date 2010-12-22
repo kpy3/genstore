@@ -25,7 +25,6 @@ start_link() ->
 %% ===================================================================
 
 init([]) ->
-    {ok, Timeout} = application:get_env(timeout),
-    ChainExtractor = ?CHILD(gs_chain_ext, [], worker),
-    {ok, { {one_for_one, 5, 10}, [ChainExtractor]} }.
+    Chain = ?CHILD(gs_chain, [], worker),
+    {ok, { {one_for_one, 5, 10}, [Chain]} }.
 %    {ok, { {one_for_one, 5, 10}, []} }.
