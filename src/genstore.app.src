@@ -5,8 +5,7 @@
   {registered, [gs_sup]},
   {applications, [
                   kernel,
-                  stdlib,
-                  mochiweb
+                  stdlib
                  ]},
   {mod, { gs_app, []}},
   {env, []}
