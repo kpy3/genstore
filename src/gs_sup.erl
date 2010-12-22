@@ -4,14 +4,13 @@
 
 -behaviour(supervisor).
 
+-include("genstore.hrl").
+
 %% API
 -export([start_link/0]).
 
 %% Supervisor callbacks
 -export([init/1]).
-
-%% Helper macro for declaring children of supervisor
--define(CHILD(I, Options, Type), {I, {I, start_link, Options}, permanent, 5000, Type, [I]}).
 
 %% ===================================================================
 %% API functions
@@ -25,6 +24,7 @@ start_link() ->
 %% ===================================================================
 
 init([]) ->
-    Chain = ?CHILD(gs_chain, [], worker),
-    {ok, { {one_for_one, 5, 10}, [Chain]} }.
+    Number = ?CHILD(gs_number, [], worker),
+    ChainSup = ?CHILD(gs_chain_sup, [], supervisor),
+    {ok, { {one_for_one, 5, 10}, [ChainSup, Number]} }.
 %    {ok, { {one_for_one, 5, 10}, []} }.

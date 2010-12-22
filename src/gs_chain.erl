@@ -4,53 +4,40 @@
 
 -behaviour(gen_server).
 
--export([start_link/0, insert/1]).
+-export([start_link/0, extract_chains/1]).
 
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
          terminate/2, code_change/3]).
 
 -define(SERVER, ?MODULE).
--define(TIMEOUT(T), T * 1000).
 
--record(state, {timeout}).
+-record(state, {}).
 
 start_link() ->
-    gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
+    gen_server:start_link(?MODULE, [], []).
 
-insert(N) ->
-    gen_server:cast(erlang:whereis(?SERVER),{insert, N}).
+extract_chains(Cache) ->
+    gen_server:cast(erlang:whereis(?SERVER),{extract_chains, Cache}).
 
 init([]) ->
-    {ok, Timeout} = application:get_env(timeout),
-    {ok, #state{timeout = Timeout}, ?TIMEOUT(Timeout)}.
+    {ok, #state{}}.
 
 handle_call(_Request, _From, State) ->
     Reply = ok,
-    Timeout = State#state.timeout,
-    {reply, Reply, State, ?TIMEOUT(Timeout)}.
+    {reply, Reply, State}.
 
-handle_cast({insert, N}, State) ->
-    io:format(<<"===> Received N = ~p~n">>, [N]),
-    Timeout = State#state.timeout,
-    {noreply, State, ?TIMEOUT(Timeout)};
+handle_cast({extract_chains, Cache}, State) ->
+     io:format(<<"===> Start chain search~n">>, []),
+%    Cache:insert(N),
+    {stop, normal, State};
 handle_cast(_Msg, State) ->
-    Timeout = State#state.timeout,
-    {noreply, State, ?TIMEOUT(Timeout)}.
+    {noreply, State}.
 
 handle_info(_Info, State) ->
-    Now = iso_8601_fmt(erlang:localtime()),
-    io:format(<<"===> [~s] timeout!~n">>, [Now]),
-    Timeout = State#state.timeout,
-    {noreply, State, ?TIMEOUT(Timeout)}.
-
-iso_8601_fmt(DateTime) ->
-    {{Year,Month,Day},{Hour,Min,Sec}} = DateTime,
-    io_lib:format("~4.10.0B-~2.10.0B-~2.10.0B ~2.10.0B:~2.10.0B:~2.10.0B",
-        [Year, Month, Day, Hour, Min, Sec]).
+    {noreply, State}.
 
 terminate(_Reason, _State) ->
     ok.
 
 code_change(_OldVsn, State, _Extra) ->
-    Timeout = State#state.timeout,
-    {ok, State, ?TIMEOUT(Timeout)}.
+    {ok, State}.
