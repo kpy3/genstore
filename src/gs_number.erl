@@ -36,7 +36,7 @@ handle_call(_Request, _From, State) ->
     {reply, Reply, State, ?TIMEOUT}.
 
 handle_cast({insert, N}, #state{timeout = Timeout, cache = Cache} = _State) ->
-    Cache:insert(N),
+    ets:insert(Cache,{N}),
     Now = calendar:local_time(),
     NowTime = calendar:datetime_to_gregorian_seconds(Now),
     {noreply, #state{last_access = NowTime, timeout = Timeout, cache = Cache}, ?TIMEOUT};
