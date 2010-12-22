@@ -26,13 +26,15 @@ handle_call(_Request, _From, State) ->
     Reply = ok,
     {reply, Reply, State}.
 
-handle_cast({extract_chains, Cache}, State) ->
-     io:format(<<"===> Start chain search~n">>, []),
-%    Cache:insert(N),
-    {stop, normal, State};
 handle_cast(_Msg, State) ->
     {noreply, State}.
 
+handle_info({store_chains, Cache}, State) ->
+    io:format("===> Store chains from cache ~p~n", [Cache]),
+    timer:sleep(15000),
+    From = erlang:whereis(gs_number),
+    From ! {chains_stored, Cache},
+    {stop, normal, State};
 handle_info(_Info, State) ->
     {noreply, State}.
 
