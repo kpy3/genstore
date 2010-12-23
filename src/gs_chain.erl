@@ -30,7 +30,8 @@ handle_cast(_Msg, State) ->
     {noreply, State}.
 
 handle_info({store_chains, Cache}, State) ->
-    io:format("===> Store chains from cache ~p~n", [Cache]),
+%    io:format("===> Store chains from cache ~p~n", [Cache]),
+    gs_event:store_chains(Cache),
     timer:sleep(15000),
     From = erlang:whereis(gs_number),
     From ! {chains_stored, Cache},

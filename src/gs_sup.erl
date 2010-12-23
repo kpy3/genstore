@@ -25,6 +25,7 @@ start_link() ->
 
 init([]) ->
     Number = ?CHILD(gs_number, [], worker),
+    EventManager = ?CHILD(gs_event, [], worker),
     ChainSup = ?CHILD(gs_chain_sup, [], supervisor),
-    {ok, { {one_for_one, 5, 10}, [ChainSup, Number]} }.
+    {ok, { {one_for_one, 5, 10}, [ChainSup, EventManager, Number]} }.
 %    {ok, { {one_for_one, 5, 10}, []} }.

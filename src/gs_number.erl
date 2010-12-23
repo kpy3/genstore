@@ -44,8 +44,10 @@ handle_cast(_Msg, State) ->
     {noreply, State, ?TIMEOUT}.
 
 handle_info({chains_stored, Cache}, State) ->
-    io:format("===> Chains stored from ~p~n", [Cache]),
+%    io:format("===> Chains stored from ~p~n", [Cache]),
+    gs_event:chains_stored(Cache),
     ets:delete(Cache),
+    gs_event:cache_deleted(Cache),
     {noreply, State, ?TIMEOUT};
 handle_info(_Info,  #state{
                         last_access = LastAccess,

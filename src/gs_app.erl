@@ -15,7 +15,13 @@ start(_StartType, _StartArgs) ->
     {ok, Config} = application:get_env(mochiweb),
     mochiweb_http:start(Config),
     gs_store:init(),
-    gs_sup:start_link().
+    case gs_sup:start_link() of
+        {ok, Pid} ->
+            gs_event_logger:add_handler(),
+            {ok, Pid};
+        Other ->
+            {error, Other}
+    end.
 
 stop(_State) ->
     mochiweb_http:stop(),
