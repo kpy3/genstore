@@ -15,9 +15,12 @@ handle_request(Req) ->
             Req:respond({412, [], "Precondition Failed\r\n"})
     end.
 
-insert(N) when is_integer(N) ->
-    gs_chain:insert(N),
-    ok;
-insert(_) ->
-    {error, bad_number}.
+insert(N) ->
+    try list_to_integer(binary_to_list(N)) of
+        Num -> 
+            gs_number:insert(Num)
+    catch 
+        _:_ -> 
+            error
+    end.
         
