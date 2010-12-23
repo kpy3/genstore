@@ -12,7 +12,7 @@ handle_request(Req) ->
         ok -> 
             Req:respond({201, [], "201 Created\r\n"});
         _ ->
-            Req:respond({412, [], "Precondition Failed\r\n"})
+            Req:respond({200, [], "Wrong input, must be a number!\r\n"})
     end.
 
 insert(N) ->
